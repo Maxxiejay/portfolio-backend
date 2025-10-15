@@ -8,7 +8,26 @@ import contactRoutes from "./routes/contact.js";
 
 const app = express();
 
-// app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",         // local Vue dev server
+  "https://maxwell-joshua.netlify.app"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true); // origin is allowed
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // Routes
